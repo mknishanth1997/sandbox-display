@@ -3,59 +3,19 @@ import { Avatar } from "@/avatar-svg";
 import { AvatarBadge } from "@/avatar-svg";
 import { AvatarPanel } from "@/avatar-svg";
 import { SandboxDisplayInnerFrame } from "@/sandbox-display-inner-frame/SandboxDisplayInnerFrame";
+import { ProfileRoster } from "@/lesson-screens";
+
 export default function Home() {
   return (
-    <div className="min-h-screen w-full  flex items-center justify-center gap-4 p-8">
+    <div
+      className="   h-full w-[700px]
+  "
+    >
       <SandboxDisplayOuterFrame>
         <SandboxDisplayInnerFrame>
-          <div
-            className="
-    grid
-    w-full
-    max-w-2xl
-    grid-cols-4
-    gap-3
-    items-start
-    sm:grid-cols-3
-    lg:grid-cols-5
-  "
-          >
-            {/* Your AvatarPanels go here */}
-            <AvatarPanel
-              id={1}
-              name="Harper M."
-              reaction="raised"
-              isActive
-              bgColor="bg-violet-400"
-            />
-            <AvatarPanel
-              id={1}
-              name="Harper M."
-              reaction="raised"
-              isActive={false}
-              bgColor="bg-violet-400"
-            />{" "}
-            <AvatarPanel
-              id={1}
-              name="Harper M."
-              reaction="raised"
-              isActive={false}
-              bgColor="bg-violet-400"
-            />{" "}
-            <AvatarPanel
-              id={1}
-              name="Harper M."
-              reaction="raised"
-              isActive={false}
-              bgColor="bg-violet-400"
-            />{" "}
-            <AvatarPanel
-              id={1}
-              name="Harper M."
-              reaction="raised"
-              isActive={false}
-              bgColor="bg-violet-400"
-            />
+          {/* Aurora Explosion */}
+          <div className="rounded-[32px] bg-gradient-to-br from-cyan-400 via-violet-500 to-fuchsia-500">
+            <ProfileRoster />
           </div>
         </SandboxDisplayInnerFrame>
       </SandboxDisplayOuterFrame>

@@ -22,7 +22,7 @@ export const studentsList: StudentAvatar[] = [
     name: "Ethan",
     gender: "boy", // Added classic round glasses
     getAvatarUrl: (r) =>
-      `https://api.dicebear.com/9.x/adventurer/svg?seed=Ethan&hair=short01&eyes=variant02&skinColor=f4d3b6&glassesProbability=100&glasses=variant01&mouth=${r === "raised" ? "variant11" : "variant01"}`,
+      `https://api.dicebear.com/7.x/avataaars/svg?seed=Sofia2`,
   },
   {
     id: 3,

@@ -69,7 +69,7 @@ export function SandboxDisplayOuterFrame({
         <TopBar />
 
         {/* Content */}
-        <div className={`flex-1 ${noPadding ? "" : "p-4 md:p-6"}`}>
+        <div className={`min-h-0 flex-1 ${noPadding ? "" : "p-4 md:p-6"}`}>
           <div
             className={`
     h-full
