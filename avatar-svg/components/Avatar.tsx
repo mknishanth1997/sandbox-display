@@ -1,29 +1,22 @@
 // "use client";
 import Image from "next/image";
 
-import { buildAvatarData } from "@/avatar-svg";
-
 type AvatarProps = {
-  id: number;
-  reaction: "normal" | "raised";
+  src: string; // Accepts any resolved image path or dynamic API URL string
+  alt: string; // Clean accessibility tag passed down from your data object
 };
 
-export function Avatar({ id, reaction }: AvatarProps) {
-  const avatar = buildAvatarData({
-    id,
-    reaction,
-  });
+export function Avatar({ src, alt }: AvatarProps) {
+  if (!src) return null;
 
-  if (!avatar) return null;
-  console.log(avatar.url, "NIhsnath");
   return (
     <Image
-      src={avatar.url}
-      alt={avatar.name}
+      src={src}
+      alt={alt}
       width={120}
       height={120}
       className="h-full w-full object-cover"
-      unoptimized
+      unoptimized // Keeps your DiceBear vector SVGs perfectly crisp without compression artifacts
     />
   );
 }
