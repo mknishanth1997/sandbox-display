@@ -9,12 +9,18 @@ export function SandboxDisplayOuterFrame({
 }: SandboxFrameProps) {
   const [hovered, setHovered] = useState(false);
 
+  // THE LOCAL CONTROLLER ENGINE: Keeps everything completely isolated inside the frame
+  const [isTvOn, setIsTvOn] = useState(true);
+
   return (
     <div
       className={`relative h-full w-full ${className}`}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
     >
+      {/* Injecting the pure, isolated inner-content CRT animation stack */}
+      <style dangerouslySetInnerHTML={{ __html: INNER_CRT_STYLES }} />
+
       {/* Outer glow / shadow */}
       <div
         className="absolute inset-0 rounded-3xl transition-all duration-300 pointer-events-none"
@@ -65,31 +71,38 @@ export function SandboxDisplayOuterFrame({
         "
         />
 
-        {/* Top bar */}
-        <TopBar />
+        {/* Top bar — passing state down internally so it's hidden from your macro layout */}
+        <TopBar isTvOn={isTvOn} onToggleTv={() => setIsTvOn(!isTvOn)} />
 
-        {/* Content */}
+        {/* Content Tracking Bay */}
         <div className={`min-h-0 flex-1 ${noPadding ? "" : "p-4 md:p-6"}`}>
           <div
             className={`
-    h-full
-    overflow-hidden
-    rounded-2xl
-    ${
-      noPadding
-        ? ""
-        : `
-          border
-          border-white/[0.05]
-          bg-[#11131a]
-          ring-1
-          ring-white/[0.03]
-          shadow-[inset_0_1px_0_rgba(255,255,255,0.03)]
-        `
-    }
-  `}
+              h-full
+              overflow-hidden
+              rounded-2xl
+              ${
+                noPadding
+                  ? ""
+                  : `
+                    border
+                    border-white/[0.05]
+                    bg-[#11131a]
+                    ring-1
+                    ring-white/[0.03]
+                    shadow-[inset_0_1px_0_rgba(255,255,255,0.03)]
+                  `
+              }
+            `}
           >
-            {children}
+            {/* The CRT Animation Wrapper mapping to local engine states */}
+            <div
+              className={`w-full h-full ${
+                isTvOn ? "animate-inner-crt-on" : "animate-inner-crt-off"
+              }`}
+            >
+              {children}
+            </div>
           </div>
         </div>
       </div>
@@ -97,7 +110,6 @@ export function SandboxDisplayOuterFrame({
   );
 }
 
-// Traffic lights component for the top bar, mimicking macOS style. Each light is a colored circle (red, yellow, green) that represents close, minimize, and maximize actions respectively. The colors are defined in an array and rendered using a map function. The component is styled to be small and circular, with appropriate spacing between the lights.
 function TrafficLights() {
   const lights = [
     { color: "#ff5f57" },
@@ -120,8 +132,12 @@ function TrafficLights() {
   );
 }
 
-// Top bar component for the sandbox frame. It includes the traffic lights on the left and a centered title. The top bar has a blurred background with a subtle border at the bottom. The title is styled with a monospaced font and is semi-transparent to blend with the overall design. The traffic lights are positioned on the left, while the title is centered using absolute positioning.
-function TopBar() {
+interface TopBarProps {
+  isTvOn: boolean;
+  onToggleTv: () => void;
+}
+
+function TopBar({ isTvOn, onToggleTv }: TopBarProps) {
   return (
     <div className="relative flex h-11 items-center justify-between border-b border-white/[0.06] bg-white/[0.03] px-4 backdrop-blur-xl">
       {/* Left controls */}
@@ -132,7 +148,6 @@ function TopBar() {
         <span
           className="font-mono text-[11px] tracking-wider font-semibold text-white/70 select-none"
           style={{
-            // Crisp, dark drop shadow to guarantee readability over bright child content
             textShadow: "0 1px 3px rgba(0,0,0,0.6)",
           }}
         >
@@ -140,32 +155,94 @@ function TopBar() {
         </span>
       </div>
 
-      {/* Right badge — Square Pulse Glow */}
-      <div className="flex items-center">
+      {/* Right badge — Dynamic state-swapping while preserving your exact original architecture spacing */}
+      <button
+        onClick={onToggleTv}
+        className="flex items-center active:scale-95 transition-transform cursor-pointer select-none bg-transparent border-none p-0 outline-none"
+      >
         <div
-          className="
+          className={`
             relative
             rounded-[4px] 
             border 
-            border-emerald-500/20 
-            bg-zinc-950/50 
             px-2 
             py-0.5 
             font-mono 
             text-[9px] 
             font-bold 
             tracking-wider 
-            text-emerald-300
-            
-            /* Clean ambient emerald halo bloom */
-            shadow-[0_0_16px_-2px_rgba(16,185,129,0.2),0_4px_12px_-4px_rgba(0,0,0,0.5)]
-          "
+            transition-all
+            duration-300
+            ${
+              isTvOn
+                ? "border-emerald-500/20 bg-zinc-950/50 text-emerald-300 shadow-[0_0_16px_-2px_rgba(16,185,129,0.2),0_4px_12px_-4px_rgba(0,0,0,0.5)]"
+                : "border-rose-500/20 bg-zinc-950/50 text-rose-400 shadow-[0_0_16px_-2px_rgba(244,63,94,0.15),0_4px_12px_-4px_rgba(0,0,0,0.5)]"
+            }
+          `}
         >
           {/* Subtle slow pulse signal */}
-          <span className="inline-block w-1 h-1 rounded-full bg-emerald-400 mr-1.5 animate-pulse vertical-middle opacity-90" />
-          <span className="vertical-middle">LIVE</span>
+          <span
+            className={`inline-block w-1 h-1 rounded-full mr-1.5 animate-pulse vertical-middle opacity-90 ${
+              isTvOn ? "bg-emerald-400" : "bg-rose-400"
+            }`}
+          />
+          <span className="vertical-middle">{isTvOn ? "LIVE" : "OFFLINE"}</span>
         </div>
-      </div>
+      </button>
     </div>
   );
 }
+
+// Isolation tracks preventing matrix-leaks out of the overflow boundaries
+const INNER_CRT_STYLES = `
+  @keyframes innerCrtTurnOff {
+    0% {
+      transform: scale(1, 1);
+      filter: brightness(1) contrast(1);
+      opacity: 1;
+    }
+    38% {
+      transform: scale(0.003, 1);
+      filter: brightness(2.5) contrast(1.2);
+      opacity: 1;
+    }
+    82% {
+      transform: scale(0.003, 0);
+      filter: brightness(5);
+      opacity: 0.8;
+    }
+    100% {
+      transform: scale(0, 0);
+      filter: brightness(10);
+      opacity: 0;
+    }
+  }
+
+  @keyframes innerCrtTurnOn {
+    0% {
+      transform: scale(0, 0);
+      filter: brightness(5);
+      opacity: 0;
+    }
+    45% {
+      transform: scale(0.003, 1);
+      filter: brightness(2.5);
+      opacity: 0.8;
+    }
+    100% {
+      transform: scale(1, 1);
+      filter: brightness(1) contrast(1);
+      opacity: 1;
+    }
+  }
+
+  .animate-inner-crt-off {
+    animation: innerCrtTurnOff 0.42s cubic-bezier(0.25, 1, 0.2, 1) forwards;
+    transform-origin: center center;
+  }
+
+  .animate-inner-crt-on {
+    animation: innerCrtTurnOn 0.38s cubic-bezier(0.25, 1, 0.3, 1) forwards;
+    transform-origin: center center;
+  }
+`;

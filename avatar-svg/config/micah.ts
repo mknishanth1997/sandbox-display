@@ -72,7 +72,7 @@ export const micahAvatars: AvatarStandardizedStructure[] = [
   },
   {
     id: 8,
-    name: "SaanviBoy",
+    name: "Ramu",
     gender: "boy",
     category: AVATAR_CATEGORY,
     bgColor: { color1: "bg-lime-500", color2: "bg-green-950" },
