@@ -170,6 +170,7 @@ export function AvatarPanel({
   if (!avatarData) return null;
   const { bgColor, name, url, category } = avatarData;
   const activeThemeClass = bgColor?.color1;
+  console.log(bgColor);
 
   return (
     <>

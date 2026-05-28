@@ -1,12 +1,21 @@
 "use client";
 import { useState } from "react";
 import { SandboxFrameProps } from "./SandboxDisplayOuterFrame.types";
+interface SandboxDisplayOuterFrameProps extends SandboxFrameProps {
+  onRedLightClick?: () => void;
+  onYellowLightClick?: () => void;
+  onGreenLightClick?: () => void;
+}
 
 export function SandboxDisplayOuterFrame({
   children,
   className = "",
   noPadding = true,
-}: SandboxFrameProps) {
+
+  onRedLightClick,
+  onYellowLightClick,
+  onGreenLightClick,
+}: SandboxDisplayOuterFrameProps) {
   const [hovered, setHovered] = useState(false);
 
   // THE LOCAL CONTROLLER ENGINE: Keeps everything completely isolated inside the frame
@@ -72,7 +81,13 @@ export function SandboxDisplayOuterFrame({
         />
 
         {/* Top bar — passing state down internally so it's hidden from your macro layout */}
-        <TopBar isTvOn={isTvOn} onToggleTv={() => setIsTvOn(!isTvOn)} />
+        <TopBar
+          isTvOn={isTvOn}
+          onToggleTv={() => setIsTvOn(!isTvOn)}
+          onRedLightClick={onRedLightClick}
+          onYellowLightClick={onYellowLightClick}
+          onGreenLightClick={onGreenLightClick}
+        />
 
         {/* Content Tracking Bay */}
         <div className={`min-h-0 flex-1 ${noPadding ? "" : "p-4 md:p-6"}`}>
@@ -110,19 +125,45 @@ export function SandboxDisplayOuterFrame({
   );
 }
 
-function TrafficLights() {
+interface TrafficLightsProps {
+  onRedClick?: () => void;
+  onYellowClick?: () => void;
+  onGreenClick?: () => void;
+}
+
+function TrafficLights({
+  onRedClick,
+  onYellowClick,
+  onGreenClick,
+}: TrafficLightsProps) {
   const lights = [
-    { color: "#ff5f57" },
-    { color: "#febc2e" },
-    { color: "#28c840" },
+    {
+      color: "#ff5f57",
+      onClick: onRedClick,
+      label: "Switch to Sunset Purple theme", // 🎯 Accessible descriptive name
+    },
+    {
+      color: "#febc2e",
+      onClick: onYellowClick,
+      label: "Switch to Cyberpunk Amber theme", // 🎯 Accessible descriptive name
+    },
+    {
+      color: "#28c840",
+      onClick: onGreenClick,
+      label: "Switch to Matrix Green theme", // 🎯 Accessible descriptive name
+    },
   ];
 
   return (
     <div className="flex items-center gap-1.5">
       {lights.map((light, index) => (
-        <div
+        <button
           key={index}
-          className="h-3 w-3 rounded-full"
+          onClick={light.onClick}
+          aria-label={
+            light.label
+          } /* ♿️ Screen readers will read this label out loud */
+          className="h-3 w-3 rounded-full cursor-pointer transition-transform active:scale-75"
           style={{
             backgroundColor: light.color,
           }}
@@ -135,13 +176,27 @@ function TrafficLights() {
 interface TopBarProps {
   isTvOn: boolean;
   onToggleTv: () => void;
+
+  onRedLightClick?: () => void;
+  onYellowLightClick?: () => void;
+  onGreenLightClick?: () => void;
 }
 
-function TopBar({ isTvOn, onToggleTv }: TopBarProps) {
+function TopBar({
+  isTvOn,
+  onToggleTv,
+  onRedLightClick,
+  onYellowLightClick,
+  onGreenLightClick,
+}: TopBarProps) {
   return (
     <div className="relative flex h-11 items-center justify-between border-b border-white/[0.06] bg-white/[0.03] px-4 backdrop-blur-xl">
       {/* Left controls */}
-      <TrafficLights />
+      <TrafficLights
+        onRedClick={onRedLightClick}
+        onYellowClick={onYellowLightClick}
+        onGreenClick={onGreenLightClick}
+      />
 
       {/* Center title — Clean, High-Contrast Monochrome */}
       <div className="absolute inset-0 flex items-center justify-center pointer-events-none">

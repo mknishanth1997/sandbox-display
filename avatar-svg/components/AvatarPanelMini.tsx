@@ -1,37 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import { AvatarStandardizedStructure } from "@/avatar-svg";
 import { buildAvatarData } from "@/avatar-svg";
 import { Avatar } from "@/avatar-svg";
-
-function DicebearAvatarPlaceholder({ id }: { id: number }) {
-  return (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      viewBox="0 0 100 100"
-      className="w-full h-full p-1"
-    >
-      <circle cx="50" cy="50" r="40" fill="white" fillOpacity="0.15" />
-      <circle cx="35" cy="42" r="5" fill="white" />
-      <circle cx="65" cy="42" r="5" fill="white" />
-      <path
-        d="M 35 65 Q 50 80 65 65"
-        stroke="white"
-        strokeWidth="4"
-        fill="transparent"
-        strokeLinecap="round"
-      />
-    </svg>
-  );
-}
-
-type ProfileMiniRowProps = {
-  id: number;
-  items: AvatarStandardizedStructure[];
-  reaction?: "normal" | "raised";
-  isActive?: boolean;
-};
+import { ProfileMiniRowProps } from "@/avatar-svg";
 
 export function ProfileMiniRow({
   id,

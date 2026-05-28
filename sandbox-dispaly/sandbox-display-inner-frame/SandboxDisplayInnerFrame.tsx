@@ -27,31 +27,38 @@ export function SandboxDisplayInnerFrame({
       <div className="pointer-events-none absolute bottom-0 left-1/4 h-56 w-56 rounded-full bg-cyan-500/5 blur-[90px]" />
 
       {/* header */}
+      {/* header */}
       <div
         className="
-          relative
-          z-10
-          flex
-          shrink-0
-          items-center
-          justify-between
-          border-b
-          border-white/[0.04]
-          pt-3 /* Adds padding inside top of header to keep it off the frame border */
-          pb-3 /* 2. No bottom margin (mb-0), spacing stops right at the border */
-        "
+    relative
+    z-10
+    flex
+    shrink-0
+    items-center
+    justify-between
+    border-b
+    border-white/[0.04]
+    pt-3
+    pb-3
+  "
       >
         <div>
-          <h3 className="font-mono text-[10px] uppercase tracking-[0.22em] text-zinc-500">
+          {/* 🎯 SUBTLE BUT READABLE: 
+        Using zinc-400 with tracking ensures crisp contrast clarity for Google 
+        while remaining secondary and subtler than the main title text below it. */}
+          <h3 className="font-mono text-[10px] uppercase tracking-[0.22em] text-zinc-400/85">
             Class List
           </h3>
 
-          <p className="text-[13px] font-semibold text-zinc-200">
+          <p className="text-[13px] font-semibold text-zinc-200 mt-0.5">
             Active Roster Selection
           </p>
         </div>
 
-        <span className="rounded border border-zinc-800 bg-zinc-900 px-2 py-1 font-mono text-[9px] text-zinc-400">
+        {/* 🎯 STANDALONE BADGE STYLE:
+      Shifted to a subtle, self-contained indigo/zinc tint. This gives it its own clear 
+      identity in the layout, looks premium, and easily clears the high-contrast readability thresholds. */}
+        <span className="rounded-[4px] border border-indigo-500/15 bg-indigo-500/[0.06] px-2 py-0.5 font-mono text-[9px] font-medium text-indigo-300 shadow-[0_2px_8px_rgba(0,0,0,0.2)]">
           8 Instances Loaded
         </span>
       </div>

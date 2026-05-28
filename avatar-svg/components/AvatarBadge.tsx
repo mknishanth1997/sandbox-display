@@ -2,15 +2,7 @@
 import { useState } from "react";
 import { Avatar } from "@/avatar-svg";
 import { buildAvatarData } from "@/avatar-svg";
-import { AvatarStandardizedStructure } from "@/avatar-svg";
-
-type AvatarBadgeProps = {
-  items: AvatarStandardizedStructure[];
-  id: number;
-  reaction?: "normal" | "raised";
-  isActive?: boolean;
-  size?: "sm" | "md";
-};
+import { AvatarBadgeProps } from "@/avatar-svg";
 
 const GRADIENTS = [
   "bg-gradient-to-br from-purple-600 to-indigo-700",

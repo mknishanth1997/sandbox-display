@@ -20,7 +20,9 @@ export function buildAvatarData({
   const resolvedBgColor = {
     color1: asset.bgColor?.color1 || "bg-zinc-800", // Safe default color fallback
     color2: asset.bgColor?.color2,
-    fallback: asset.bgColor?.fallback,
+    color3: asset.bgColor?.color3,
+    color4: asset.bgColor?.color4,
+    color5: asset.bgColor?.color5,
   };
 
   // 4. Resolve the URL safely
